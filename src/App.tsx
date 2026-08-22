@@ -28,6 +28,9 @@ import { RecentAlertsCard } from './components/RecentAlertsCard';
 import { NearbyParksCard } from './components/NearbyParksCard';
 import { MiniMapCard } from './components/MiniMapCard';
 import { GoogleAdZone } from './components/GoogleAdZone';
+import { ActionableWeatherAdvice } from './components/ActionableWeatherAdvice';
+import { SafetyAdvisoryModal } from './components/SafetyAdvisoryModal';
+import { DataLegendModal } from './components/DataLegendModal';
 import { MapView } from './components/MapView';
 import { CommunityView } from './components/CommunityView';
 import { AlertsView } from './components/AlertsView';
@@ -64,6 +67,14 @@ function MainAppContent() {
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [isQrPassModalOpen, setIsQrPassModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
+  const [selectedSafetyAlert, setSelectedSafetyAlert] = useState<any>(null);
+  const [isLegendModalOpen, setIsLegendModalOpen] = useState(false);
+
+  const handleOpenSafety = (alert?: any) => {
+    setSelectedSafetyAlert(alert || null);
+    setIsSafetyModalOpen(true);
+  };
 
   const handleSelectPark = (parkId: string) => {
     setSelectedParkId(parkId);
@@ -93,6 +104,7 @@ function MainAppContent() {
         currentPark={currentPark}
         onSelectPark={handleSelectPark}
         onOpenQrPass={() => setIsQrPassModalOpen(true)}
+        onOpenLegend={() => setIsLegendModalOpen(true)}
         alerts={currentPark.alerts.length > 0 ? currentPark.alerts : NATIONAL_ALERTS.slice(0, 1)}
         viewMode={viewMode}
         onToggleViewMode={handleToggleViewMode}
@@ -111,6 +123,8 @@ function MainAppContent() {
               onOpenQrPass={() => setIsQrPassModalOpen(true)}
               onOpenPlanModal={() => setIsPlanModalOpen(true)}
               onNavigateTab={setActiveTab}
+              onOpenSafety={handleOpenSafety}
+              onOpenLegend={() => setIsLegendModalOpen(true)}
             />
           ) : (
             /* Full Multi-Column Desktop Grid View - switches gracefully on window resize */
@@ -124,6 +138,13 @@ function MainAppContent() {
                   <HeroWeatherCard
                     park={currentPark}
                     onOpenQrPass={() => setIsQrPassModalOpen(true)}
+                  />
+
+                  {/* Prominent Actionable Weather Recommendation */}
+                  <ActionableWeatherAdvice
+                    park={currentPark}
+                    onOpenLegend={() => setIsLegendModalOpen(true)}
+                    onOpenSafety={handleOpenSafety}
                   />
 
                   {/* 4-Hour & 12-Hour Rain Probability Trend */}
@@ -147,14 +168,6 @@ function MainAppContent() {
                     />
                   </div>
 
-                  {/* Non-intrusive In-feed Monetization Zone */}
-                  <GoogleAdZone
-                    format="leaderboard"
-                    adSlot="sg-parkweather-incontent-leaderboard"
-                    id="incontent-leaderboard-ad"
-                    className="my-1"
-                  />
-
                   {/* Sun, Sunrise, Sunset & Astronomical Solar Schedule Card */}
                   <SolarTimesCard park={currentPark} />
 
@@ -176,9 +189,10 @@ function MainAppContent() {
                   <RecentAlertsCard
                     alerts={currentPark.alerts.length > 0 ? currentPark.alerts : NATIONAL_ALERTS.slice(0, 1)}
                     onViewAllAlerts={() => setActiveTab('alerts')}
+                    onOpenSafety={handleOpenSafety}
                   />
 
-                  {/* Sidebar 300x250 IAB Compliant Medium Rectangle Ad */}
+                  {/* Sidebar 300x250 IAB Compliant Medium Rectangle Ad (ONE on the side) */}
                   <div className="flex justify-center my-1">
                     <GoogleAdZone
                       format="rectangle"
@@ -198,7 +212,7 @@ function MainAppContent() {
 
               </div>
 
-              {/* Bottom Content Monetization Banner */}
+              {/* Bottom Content Monetization Banner (ONE at the end) */}
               <GoogleAdZone
                 format="banner"
                 adSlot="bottom-content-banner"
@@ -242,7 +256,7 @@ function MainAppContent() {
               handleSelectPark(id);
               setActiveTab('parks');
             }}
-            onOpenParkPass={() => setIsQrPassModalOpen(true)}
+            onOpenSafety={handleOpenSafety}
           />
         )}
 
@@ -271,6 +285,21 @@ function MainAppContent() {
         park={currentPark}
         isOpen={isQrPassModalOpen}
         onClose={() => setIsQrPassModalOpen(false)}
+      />
+
+      <SafetyAdvisoryModal
+        park={currentPark}
+        isOpen={isSafetyModalOpen}
+        onClose={() => {
+          setIsSafetyModalOpen(false);
+          setSelectedSafetyAlert(null);
+        }}
+        selectedAlert={selectedSafetyAlert}
+      />
+
+      <DataLegendModal
+        isOpen={isLegendModalOpen}
+        onClose={() => setIsLegendModalOpen(false)}
       />
 
       <PrivacyModal

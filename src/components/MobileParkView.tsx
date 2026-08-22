@@ -5,6 +5,7 @@ import { useLanguage } from '../context/LanguageContext';
 import { PARKS_DATA, NATIONAL_ALERTS } from '../data/parksData';
 import { SaveAppShortcutButton } from './SaveAppShortcutButton';
 import { GoogleAdZone } from './GoogleAdZone';
+import { ActionableWeatherAdvice } from './ActionableWeatherAdvice';
 import { RainProbabilityCard } from './RainProbabilityCard';
 import { HeatStressIndexCard } from './HeatStressIndexCard';
 import { WeatherHistoryAndProjectionCard } from './WeatherHistoryAndProjectionCard';
@@ -22,6 +23,8 @@ interface MobileParkViewProps {
   onOpenQrPass: () => void;
   onOpenPlanModal: () => void;
   onNavigateTab: (tab: AppTab) => void;
+  onOpenSafety?: (alert?: any) => void;
+  onOpenLegend?: () => void;
 }
 
 export const MobileParkView: React.FC<MobileParkViewProps> = ({
@@ -30,6 +33,8 @@ export const MobileParkView: React.FC<MobileParkViewProps> = ({
   onOpenQrPass,
   onOpenPlanModal,
   onNavigateTab,
+  onOpenSafety,
+  onOpenLegend,
 }) => {
   const { 
     requestUserLocation, 
@@ -202,30 +207,29 @@ export const MobileParkView: React.FC<MobileParkViewProps> = ({
         </div>
       </div>
 
-      {/* 3. Rain Probability Trend (4h vs 12h) */}
+      {/* 3. Actionable Weather Recommendation Banner */}
+      <ActionableWeatherAdvice 
+        park={park} 
+        onOpenLegend={onOpenLegend}
+        onOpenSafety={onOpenSafety}
+      />
+
+      {/* 4. Rain Probability Trend (4h vs 12h) */}
       <RainProbabilityCard data={park.rainProbability} />
 
-      {/* 4. Tropical Heat Stress Index (TP-HSI) Card */}
+      {/* 5. Tropical Heat Stress Index (TP-HSI) Card */}
       <HeatStressIndexCard />
 
-      {/* 5. Historical Weather Data & 7-Day / On-Demand Projection */}
+      {/* 6. Historical Weather Data & 7-Day / On-Demand Projection */}
       <WeatherHistoryAndProjectionCard park={park} />
 
-      {/* 6. UV Index Gauge */}
+      {/* 7. UV Index Gauge */}
       <UVIndexCard uvIndex={park.uvIndex} />
 
-      {/* 7. Best Time to Visit & Planning Widget */}
+      {/* 8. Best Time to Visit & Planning Widget */}
       <BestTimeToVisitCard
         park={park}
         onOpenPlanModal={onOpenPlanModal}
-      />
-
-      {/* 8. Google AdSense In-Feed Monetization Zone */}
-      <GoogleAdZone
-        format="in-feed"
-        adSlot="sg-parkweather-mobile-feed"
-        id="mobile-infeed-ad"
-        className="my-1 w-full"
       />
 
       {/* 9. Sunrise & Sunset Solar Times Card */}
@@ -244,12 +248,21 @@ export const MobileParkView: React.FC<MobileParkViewProps> = ({
       <RecentAlertsCard
         alerts={park.alerts.length > 0 ? park.alerts : NATIONAL_ALERTS.slice(0, 1)}
         onViewAllAlerts={() => onNavigateTab('alerts')}
+        onOpenSafety={onOpenSafety}
       />
 
       {/* 13. Map Mini-View */}
       <MiniMapCard
         park={park}
         onOpenFullMap={() => onNavigateTab('map')}
+      />
+
+      {/* 14. Single Bottom Google AdZone at the very end */}
+      <GoogleAdZone
+        format="banner"
+        adSlot="sg-parkweather-mobile-feed"
+        id="mobile-bottom-ad"
+        className="mt-4 w-full"
       />
 
     </div>

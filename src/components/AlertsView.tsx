@@ -5,10 +5,10 @@ import { Park } from '../types';
 interface AlertsViewProps {
   currentPark: Park;
   onSelectPark: (parkId: string) => void;
-  onOpenParkPass: () => void;
+  onOpenSafety: (alert?: any) => void;
 }
 
-export const AlertsView: React.FC<AlertsViewProps> = ({ currentPark, onOpenParkPass }) => {
+export const AlertsView: React.FC<AlertsViewProps> = ({ currentPark, onOpenSafety }) => {
   return (
     <div className="w-full flex flex-col gap-6 animate-in fade-in duration-300" id="alerts-view-container">
       
@@ -25,11 +25,11 @@ export const AlertsView: React.FC<AlertsViewProps> = ({ currentPark, onOpenParkP
         </div>
 
         <button
-          onClick={onOpenParkPass}
-          className="bg-[#006b47] hover:bg-[#00875a] text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+          onClick={() => onOpenSafety()}
+          className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shadow-xs"
         >
-          <span className="material-symbols-outlined text-[18px]">roofing</span>
-          <span>Find Shelters Directory</span>
+          <span className="material-symbols-outlined text-[18px]">health_and_safety</span>
+          <span>View Safety Measures</span>
         </button>
       </div>
 
@@ -71,16 +71,17 @@ export const AlertsView: React.FC<AlertsViewProps> = ({ currentPark, onOpenParkP
               {alert.description}
             </p>
 
-            <div className="flex items-center justify-between text-xs font-semibold text-[#006b47]">
-              <span className="flex items-center gap-1">
+            <div className="flex items-center justify-between text-xs font-semibold text-[#ba1a1a]">
+              <span className="flex items-center gap-1 text-[#006b47]">
                 <span className="material-symbols-outlined text-[16px]">verified</span>
                 Verified Meteorological Telemetry
               </span>
               <button 
-                onClick={onOpenParkPass}
-                className="underline hover:text-[#00875a] cursor-pointer"
+                onClick={() => onOpenSafety(alert)}
+                className="underline hover:text-red-800 font-bold cursor-pointer flex items-center gap-1"
               >
-                {alert.actionText || 'View Safety Measures →'}
+                <span>{alert.actionText || 'View Safety Measures'}</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
               </button>
             </div>
           </div>

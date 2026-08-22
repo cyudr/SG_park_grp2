@@ -4,9 +4,10 @@ import { ParkAlert } from '../types';
 interface RecentAlertsCardProps {
   alerts: ParkAlert[];
   onViewAllAlerts: () => void;
+  onOpenSafety?: (alert?: ParkAlert) => void;
 }
 
-export const RecentAlertsCard: React.FC<RecentAlertsCardProps> = ({ alerts, onViewAllAlerts }) => {
+export const RecentAlertsCard: React.FC<RecentAlertsCardProps> = ({ alerts, onViewAllAlerts, onOpenSafety }) => {
   if (!alerts || alerts.length === 0) {
     return (
       <div 
@@ -32,19 +33,29 @@ export const RecentAlertsCard: React.FC<RecentAlertsCardProps> = ({ alerts, onVi
           <span className="material-symbols-outlined text-[#ba1a1a] text-[22px]">warning</span>
           <span>Recent Alerts</span>
         </h2>
-        <button
-          onClick={onViewAllAlerts}
-          className="text-xs font-bold text-[#ba1a1a] hover:underline cursor-pointer bg-red-50 px-2 py-0.5 rounded-full border border-red-200"
-        >
-          View All Details
-        </button>
+        <div className="flex items-center gap-2">
+          {onOpenSafety && (
+            <button
+              onClick={() => onOpenSafety()}
+              className="text-xs font-bold text-red-700 hover:bg-red-100 cursor-pointer bg-red-50 px-2.5 py-1 rounded-lg border border-red-300"
+            >
+              Safety Measures
+            </button>
+          )}
+          <button
+            onClick={onViewAllAlerts}
+            className="text-xs font-bold text-[#ba1a1a] hover:underline cursor-pointer bg-red-50 px-2.5 py-1 rounded-lg border border-red-200"
+          >
+            All Alerts
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2.5">
         {alerts.map((alert) => (
           <div 
             key={alert.id}
-            onClick={onViewAllAlerts}
+            onClick={() => onOpenSafety ? onOpenSafety(alert) : onViewAllAlerts()}
             className="bg-[#fff5f5] hover:bg-[#ffebeb] p-3 rounded-xl cursor-pointer transition-all border border-red-200/70"
           >
             <h3 className="text-xs sm:text-sm font-bold text-[#93000a]">
@@ -55,8 +66,8 @@ export const RecentAlertsCard: React.FC<RecentAlertsCardProps> = ({ alerts, onVi
             </p>
             <div className="mt-2 flex items-center justify-between text-[11px] font-semibold text-[#93000a]/80">
               <span>Time: {alert.timeWindow}</span>
-              <span className="flex items-center gap-0.5 text-red-700">
-                Shelter Guide <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+              <span className="flex items-center gap-0.5 text-red-700 font-bold">
+                Safety Measures <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
               </span>
             </div>
           </div>

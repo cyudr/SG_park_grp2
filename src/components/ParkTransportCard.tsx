@@ -196,16 +196,16 @@ export const ParkTransportCard: React.FC<ParkTransportCardProps> = ({ park }) =>
         {/* Action Controls & Tab Pills */}
         <div className="flex items-center bg-[#f0f4f1] p-1 rounded-xl gap-1 text-xs font-semibold self-start sm:self-auto overflow-x-auto max-w-full">
           <button
-            onClick={() => setActiveTab('carparks')}
+            onClick={() => setActiveTab('mrt_traffic')}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeTab === 'carparks'
+              activeTab === 'mrt_traffic'
                 ? 'bg-white text-[#006b47] shadow-xs font-bold'
                 : 'text-[#3e4942] hover:text-[#181c1b]'
             }`}
-            id="tab-transport-carparks"
+            id="tab-transport-mrt"
           >
-            <span className="material-symbols-outlined text-[15px]">local_parking</span>
-            <span>Carpark Lots</span>
+            <span className="material-symbols-outlined text-[15px]">train</span>
+            <span>MRT & Bus Guide</span>
           </button>
 
           <button
@@ -218,22 +218,49 @@ export const ParkTransportCard: React.FC<ParkTransportCardProps> = ({ park }) =>
             id="tab-transport-buses"
           >
             <span className="material-symbols-outlined text-[15px]">directions_bus</span>
-            <span>Next Buses (v3)</span>
+            <span>Live Next Buses (v3)</span>
           </button>
 
           <button
-            onClick={() => setActiveTab('mrt_traffic')}
+            onClick={() => setActiveTab('carparks')}
             className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-              activeTab === 'mrt_traffic'
+              activeTab === 'carparks'
                 ? 'bg-white text-[#006b47] shadow-xs font-bold'
                 : 'text-[#3e4942] hover:text-[#181c1b]'
             }`}
-            id="tab-transport-mrt"
+            id="tab-transport-carparks"
           >
-            <span className="material-symbols-outlined text-[15px]">train</span>
-            <span>MRT & Traffic</span>
+            <span className="material-symbols-outlined text-[15px]">local_parking</span>
+            <span>Carpark Lots</span>
           </button>
         </div>
+      </div>
+
+      {/* Prominent Quick Transit Overview Strip for All Tabs */}
+      <div className="mt-3.5 p-3.5 bg-emerald-50/70 rounded-xl border border-emerald-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-lg border border-emerald-200 font-semibold text-slate-800">
+            <span className="material-symbols-outlined text-emerald-700 text-[16px]">subway</span>
+            <span><strong>{transportConfig.mrt.name} MRT</strong> ({transportConfig.mrt.stationCode})</span>
+            <span className="text-[10px] text-slate-500">• {transportConfig.mrt.walkMinutes} min walk</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-lg border border-emerald-200 font-semibold text-slate-800">
+            <span className="material-symbols-outlined text-emerald-700 text-[16px]">directions_bus</span>
+            <span>Buses: {transportConfig.busStops[0]?.services.slice(0, 5).join(', ') || 'Direct routes'}</span>
+          </div>
+        </div>
+
+        <a
+          href={`https://www.google.com/maps/dir/?api=1&destination=${park.lat},${park.lng}&travelmode=transit`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 bg-[#006b47] hover:bg-[#005235] text-white px-3 py-1.5 rounded-lg font-bold text-xs transition-colors shrink-0 shadow-2xs cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-[14px]">directions</span>
+          <span>Transit Directions</span>
+          <span className="material-symbols-outlined text-[12px]">open_in_new</span>
+        </a>
       </div>
 
       {/* TAB 1: CARPARK LOTS */}
@@ -533,34 +560,74 @@ export const ParkTransportCard: React.FC<ParkTransportCardProps> = ({ park }) =>
       {/* TAB 3: MRT RAIL & TRAFFIC INCIDENTS */}
       {activeTab === 'mrt_traffic' && (
         <div className="pt-4 space-y-4 animate-in fade-in">
-          {/* Nearest MRT Station Guide */}
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-4 sm:p-5 rounded-2xl border border-slate-700 shadow-md">
-            <div className="flex items-start justify-between gap-3 mb-2">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold font-mono text-sm">
-                  MRT
-                </div>
-                <div>
-                  <h3 className="font-bold text-base text-white">
-                    {transportConfig.mrt.name} MRT ({transportConfig.mrt.stationCode})
-                  </h3>
-                  <p className="text-xs text-slate-300">
-                    {transportConfig.mrt.line} • ~{transportConfig.mrt.walkMinutes} mins walk to park perimeter
-                  </p>
-                </div>
-              </div>
-
-              <span className="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30">
-                Rail Link
-              </span>
+          {/* Comprehensive Step-by-Step Directions Guide */}
+          <div className="p-4 bg-white/90 rounded-2xl border border-slate-200/90 shadow-xs space-y-3">
+            <div className="flex items-center gap-2 font-bold text-sm text-slate-900 border-b border-slate-100 pb-2">
+              <span className="material-symbols-outlined text-[20px] text-[#006b47]">alt_route</span>
+              <span>How to Get to {park.name} by Public Transit</span>
             </div>
 
-            {transportConfig.mrt.tip && (
-              <div className="mt-2.5 p-2.5 bg-white/10 rounded-xl text-xs text-slate-200 flex items-center gap-2">
-                <span className="material-symbols-outlined text-amber-300 text-[18px]">tips_and_updates</span>
-                <span>{transportConfig.mrt.tip}</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              {/* By MRT */}
+              <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100 space-y-1.5">
+                <div className="flex items-center gap-1.5 font-bold text-emerald-900">
+                  <span className="material-symbols-outlined text-base text-emerald-700">subway</span>
+                  <span>1. Via MRT (Train)</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed">
+                  Alight at <strong>{transportConfig.mrt.name} MRT ({transportConfig.mrt.stationCode})</strong> on the {transportConfig.mrt.line}.
+                </p>
+                <p className="text-slate-600 text-[11px]">
+                  Estimated walking time: <strong>~{transportConfig.mrt.walkMinutes} minutes</strong> ({Math.round(transportConfig.mrt.walkMinutes * 75)}m) to park entrances.
+                </p>
+                {transportConfig.mrt.tip && (
+                  <div className="text-[11px] text-emerald-800 bg-white/80 p-2 rounded-lg border border-emerald-200 mt-1">
+                    💡 <strong>Pro Tip:</strong> {transportConfig.mrt.tip}
+                  </div>
+                )}
               </div>
-            )}
+
+              {/* By Bus */}
+              <div className="p-3 bg-sky-50/60 rounded-xl border border-sky-100 space-y-1.5">
+                <div className="flex items-center gap-1.5 font-bold text-sky-900">
+                  <span className="material-symbols-outlined text-base text-sky-700">directions_bus</span>
+                  <span>2. Via Public Bus</span>
+                </div>
+                <p className="text-slate-700 leading-relaxed">
+                  Direct bus stops servicing the park perimeter:
+                </p>
+                <div className="space-y-1 text-[11px] text-slate-700">
+                  {transportConfig.busStops.slice(0, 3).map((stop) => (
+                    <div key={stop.code} className="flex items-center justify-between bg-white/80 p-1.5 rounded-lg border border-sky-200">
+                      <div>
+                        <strong className="text-sky-900">{stop.name}</strong> (#{stop.code})
+                        <div className="text-[10px] text-slate-500">{stop.roadName}</div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.5 rounded">
+                          {stop.services.slice(0, 4).join(', ')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <span className="text-[11px] text-slate-500">
+                Official transit data synchronized with LTA Singapore DataMall
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setActiveTab('buses')}
+                  className="text-xs font-bold text-[#006b47] hover:underline cursor-pointer flex items-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-[14px]">schedule</span>
+                  <span>Check Live Bus Arrival Timings →</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* LTA Train Service Status Alert */}

@@ -25,6 +25,7 @@ import weatherHumidityHandler from './api/weather/relative-humidity.ts';
 import weatherWindSpeedHandler from './api/weather/wind-speed.ts';
 import weatherWindDirHandler from './api/weather/wind-direction.ts';
 import weatherCarparksHandler from './api/weather/carparks.ts';
+import nparksCrowdHandler from './api/nparks/crowd.ts';
 
 dotenv.config();
 
@@ -56,6 +57,10 @@ async function startServer() {
 
   // OneMap routes
   app.all('/api/onemap/search', (req, res) => onemapSearchHandler(req, res));
+
+  // NParks Crowd routes
+  app.all('/api/nparks/crowd', (req, res) => nparksCrowdHandler(req, res));
+  app.all('/api/crowd', (req, res) => nparksCrowdHandler(req, res));
 
   // Weather routes
   app.all('/api/weather/two-hr-forecast', (req, res) => weatherTwoHrHandler(req, res));

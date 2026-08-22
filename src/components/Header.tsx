@@ -16,6 +16,7 @@ interface HeaderProps {
   alerts: ParkAlert[];
   viewMode?: ViewMode;
   onToggleViewMode?: (mode: ViewMode) => void;
+  onOpenLegend?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -26,7 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenQrPass,
   alerts,
   viewMode: _viewMode,
-  onToggleViewMode: _onToggleViewMode
+  onToggleViewMode: _onToggleViewMode,
+  onOpenLegend
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showParkModal, setShowParkModal] = useState(false);
@@ -217,6 +219,18 @@ export const Header: React.FC<HeaderProps> = ({
             </span>
           </button>
           
+          {/* Data Legend Button */}
+          {onOpenLegend && (
+            <button
+              onClick={onOpenLegend}
+              className="text-[#006b47] hover:bg-[#ebefed] transition-all p-1.5 sm:p-2 rounded-full cursor-pointer flex items-center justify-center"
+              title="View Weather & Metrics Data Legend"
+              id="header-legend-btn"
+            >
+              <span className="material-symbols-outlined text-[19px] sm:text-[20px]">legend_toggle</span>
+            </button>
+          )}
+
           {/* QR Code Pass & Guide */}
           <button
             onClick={onOpenQrPass}

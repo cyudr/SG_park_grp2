@@ -1,0 +1,31 @@
+{
+  "short_name": "SG ParkWeather",
+  "name": "SG ParkWeather - Singapore Parks Weather & Companion",
+  "description": "Nature-inspired meteorological data, real-time rain radar, and park guides across Singapore.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512 any",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512 any",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "64x64",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#005235",
+  "theme_color": "#006b47",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/"
+}

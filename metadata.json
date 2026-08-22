@@ -1,0 +1,6 @@
+{
+  "name": "SG ParkWeather",
+  "description": "Comprehensive Singapore park meteorological intelligence dashboard featuring 12 live GovTech APIs, past 24h & 7-day historical telemetry, on-demand date & time weather projection simulator (up to 1 week away), tiered regional NParks catalogue with official links, and rain risk tiers (Low/Medium/High).",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
